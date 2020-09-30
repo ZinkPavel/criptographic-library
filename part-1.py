@@ -35,3 +35,20 @@ def genEuclideanAlgo(a, b):
         tmpList = U[0] % V[0], U[1] - tmp * V[1], U[2] - tmp * V[2]
         U, V = V, tmpList
     return U
+
+def diffieHellmanProtocol(p, g):
+    if not isPrime(p): sys.exit('ERROR. [P] must be prime number.')
+
+    q = (p - 1) / 2 #reverse
+
+    if not isPrime(q): sys.exit('ERROR. [Q] must be prime number.')
+    if g <= 1 and g >= p - 1: sys.exit('ERROR. [G] Must be (1 < g < p - 1)')
+    if fastModuloExponentiation(g, q, p) == 1: sys.exit('ERROR. [G] Must be (g^q mod p != 1)')
+
+    xA, xB = random.randint(1, 10), random.randint(1, 10)
+    yA, yB = fastModuloExponentiation(g, xA, p), fastModuloExponentiation(g, xB, p)
+    zA, zB = fastModuloExponentiation(yB, xA, p), fastModuloExponentiation(yA, xB, p)
+    
+    if zA != zB: print('ERROR. zA != zB')
+
+    return zA
