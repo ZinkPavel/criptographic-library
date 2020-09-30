@@ -52,3 +52,32 @@ def diffieHellmanProtocol(p, g):
     if zA != zB: print('ERROR. zA != zB')
 
     return zA
+
+def firstEntry(list, x): 
+    index = 0
+    
+    for elem in list:
+        if elem == x: return index
+        index += 1
+
+    return -1
+
+def babyGiantStep(a, p, y):
+    # random generate m & k
+    m, k = random.randint(1, 10) * math.floor(math.sqrt(p)) + 1, random.randint(1, 10) * math.floor(math.sqrt(p)) + 1    
+    # --------------
+
+    result = [0, 0]
+    giantSteps, babySteps = [fastModuloExponentiation(a, m, p)], [y]
+
+    for j in range(1, m):
+        babySteps.append((a * babySteps[j-1]) % p) # in this case faster than call.fastModuloExponentiation()
+
+    for i in range(1, k - 1):
+        result[i] = firstEntry(babySteps, giantSteps[i - 1])
+        if result[i] != -1: 
+            result[0] = i
+            break
+        giantSteps.append((giantSteps[i-1] * giantSteps[i-1]) % p)
+    
+    return result[0] * m - result[1]
