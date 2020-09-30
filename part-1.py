@@ -24,3 +24,14 @@ def fastModuloExponentiation(a, x, p):
         x = x // 2
 
     return result % p 
+
+def genEuclideanAlgo(a, b):
+    if b > a: a, b = b, a
+    
+    U, V = [a, 1, 0], [b, 0, 1]
+
+    while (V[0] != 0):
+        tmp = U[0] // V[0]
+        tmpList = U[0] % V[0], U[1] - tmp * V[1], U[2] - tmp * V[2]
+        U, V = V, tmpList
+    return U
