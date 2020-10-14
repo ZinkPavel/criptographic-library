@@ -155,6 +155,45 @@ class VernamEncryption:
         return True
 
 
+class RSA:
+    def __init__(self, file_path):
+        with open(file_path, 'rb') as file:
+            self.message = file.read()
+        file.close()
+
+        self.p, self.q = part_1.gen_p(), part_1.gen_p()
+
+        self.n = self.p * self.q
+        self.f = (self.p - 1) * (self.q - 1)
+        self.d = part_1.gen_g(self.f)
+        self.c = part_1.gcd(self.d, self.f)[1]
+
+    def encrypt(self):
+        result = [0] * self.message.__len__()
+        for i in range(0, self.message.__len__()):
+            result[i] = part_1.fast_modulo_exponentiation(self.message[i], self.d, self.n)
+        return result
+
+    def decrypt(self, message):
+        result = [0] * message.__len__()
+        for i in range(0, message.__len__()):
+            result[i] = part_1.fast_modulo_exponentiation(message[i], self.c, self.n)
+        return result
+
+    @staticmethod
+    def compare(lhs, rhs):
+        for i in range(0, rhs.__len__()):
+            if rhs[i] == lhs[i]:
+                print(lhs[i], ' == ', rhs[i])
+                continue
+            else:
+                print(lhs[i], ' != ', rhs[i])
+                print("Error!")
+                return False
+        print("Successful!")
+        return True
+
+
 def main():
     print(part_1.gcd(19, 22))
     # print(shamir_protocol('file_path'))
