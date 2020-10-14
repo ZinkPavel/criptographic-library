@@ -118,6 +118,43 @@ def elgamal_encryption(file_path):
     return False
 
 
+class VernamEncryption:
+    def __init__(self, file_path):
+        with open(file_path, 'rb') as file:
+            self.message = file.read()
+        file.close()
+
+        self.k = []
+        for i in range(0, self.message.__len__()):
+            self.k.append(random.randint(0, 255))
+
+        self.tmp = [0] * self.message.__len__()
+        self.decrypted_message = [0] * self.message.__len__()
+
+    def encrypt(self):
+        for i in range(0, self.message.__len__()):
+            print(i)
+            self.tmp[i] = self.message[i] ^ self.k[i]
+        return self.tmp
+
+    def decrypt(self):
+        for i in range(0, self.message.__len__()):
+            self.decrypted_message[i] = self.tmp[i] ^ self.k[i]
+        return self.decrypted_message
+
+    def compare(self):
+        for i in range(0, self.message.__len__()):
+            if self.message[i] == self.decrypted_message[i]:
+                print(self.decrypted_message[i], ' == ', self.message[i])
+                continue
+            else:
+                print(self.decrypted_message[i], ' != ', self.message[i])
+                print("Error!")
+                return False
+        print("Successful!")
+        return True
+
+
 def main():
     print(part_1.gcd(19, 22))
     # print(shamir_protocol('file_path'))
