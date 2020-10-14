@@ -64,6 +64,60 @@ def shamir_protocol(file_path):
         return True
 
 
+def elgamal_encryption(file_path):
+    with open(file_path, 'rb') as file:
+        message = file.read()
+    file.close()
+
+    p = part_1.gen_p()
+    g = part_1.gen_g(p)
+
+    # c_a = random.randint(1, p - 1)
+    c_b = random.randint(1, p - 1)
+    # d_a = part_1.fast_modulo_exponentiation(g, c_a, p)
+    d_b = part_1.fast_modulo_exponentiation(g, c_b, p)
+
+    if int.from_bytes(message, 'big') >= p:
+        k = [0] * message.__len__()
+        r = [0] * message.__len__()
+        e = [0] * message.__len__()
+        tmp = [0] * message.__len__()
+
+        for i in range(0, message.__len__()):
+            k[i] = random.randint(1, p - 2)
+            r[i] = part_1.fast_modulo_exponentiation(g, k[i], p)
+            e[i] = message[i] * part_1.fast_modulo_exponentiation(d_b, k[i], p)
+            tmp[i] = e[i] * part_1.fast_modulo_exponentiation(r[i], p - 1 - c_b, p)
+
+        result = bytearray(tmp)
+
+        with open('elgamal_encryption_output.gif', 'wb') as file:
+            file.write(result)
+
+        for i in range(0, message.__len__()):
+            if tmp[i] == message[i]:
+                print(tmp[i], ' == ', message[i])
+                continue
+            else:
+                print(tmp[i], ' != ', message[i])
+                print("Error!")
+                return False
+        print('Successful')
+        return True
+    else:
+        k = random.randint(1, p - 2)
+        r = part_1.fast_modulo_exponentiation(g, k, p)
+        e = message * part_1.fast_modulo_exponentiation(d_b, k, p) % p
+        mx = e * part_1.fast_modulo_exponentiation(r, p - 1 - c_b, p) % p
+    if message == mx:
+        print(message, ' == ', mx)
+        print("Successful!")
+        return True
+    print(message, ' != ', mx)
+    print("Error!")
+    return False
+
+
 def main():
     print(part_1.gcd(19, 22))
     # print(shamir_protocol('file_path'))
