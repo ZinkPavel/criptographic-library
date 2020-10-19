@@ -14,4 +14,3 @@ class CardDeck:
             self.deck.append(Card(3, i))
 
         random.shuffle(self.deck)
-
