@@ -1,6 +1,12 @@
 import part_1
 
 
+class Card:
+    def __init__(self):
+        self.suit = ''
+        self.value = ''
+
+
 class Player:
     def __init__(self, name = ''):
         self.name = name
