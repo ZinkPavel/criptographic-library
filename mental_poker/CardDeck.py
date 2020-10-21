@@ -7,7 +7,7 @@ class CardDeck:
     def __init__(self):
         self.deck = []
 
-        for i in range(13):
+        for i in range(1, 14):
             self.deck.append(Card(0, i))
             self.deck.append(Card(1, i))
             self.deck.append(Card(2, i))

@@ -2,7 +2,6 @@ import random
 import sys
 
 import part_1
-import part_3
 
 from mental_poker.Player import Player
 from mental_poker.CardDeck import CardDeck
@@ -29,6 +28,14 @@ class PokerRoom:
         if 1 > self.k > SALT_P - 2:
             sys.exit(1)
 
+    def distribution(self):
+        for player in self.players:
+            self.give_card(player)
+            self.give_card(player)
+
+        for i in range(0, 5):
+            self.card_on_desk.append(self.deck.pop())
+
     def give_card(self, player):
         card = bytearray(str(self.deck.pop()), 'ascii')
         r = part_1.fast_modulo_exponentiation(SALT_G, self.k, SALT_P)
@@ -37,12 +44,4 @@ class PokerRoom:
         for i in range(0, len(card)):
             e[i] = card[i] * part_1.fast_modulo_exponentiation(player.open_key_2, self.k, SALT_P) % SALT_P
 
-        # player.take_card(r, e)
-
-    def distribution(self):
-        for player in self.players:
-            player.cards.append(self.deck.pop())
-            player.cards.append(self.deck.pop())
-
-        for i in range(0, 5):
-            self.card_on_desk.append(self.deck.pop())
+        player.take_card(r, e)
