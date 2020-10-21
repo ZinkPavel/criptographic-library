@@ -19,7 +19,7 @@ def main():
 
     pl = PollingStation()
     pl.require(response)
-    #
+
     app2 = QApplication(sys.argv)
     check = pl.check(response)
     ui2 = MessageSignature(response.nominal, response.signature, check)
