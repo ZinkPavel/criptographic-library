@@ -36,11 +36,14 @@ class PokerRoom:
             self.card_on_desk.append(self.deck.pop())
 
     def give_card(self, player):
-        card = bytearray(str(self.deck.pop()), 'ascii')
-        r = part_1.fast_modulo_exponentiation(SALT_G, self.k, SALT_P)
-        e = [0] * len(card)
+        card = self.deck.pop()
+        pair = (card.suit.value, card.value.value)
 
-        for i in range(0, len(card)):
-            e[i] = card[i] * part_1.fast_modulo_exponentiation(player.open_key_2, self.k, SALT_P) % SALT_P
+        message = bytearray(str(pair), 'ascii')
+        r = part_1.fast_modulo_exponentiation(SALT_G, self.k, SALT_P)
+        e = [0] * len(message)
+
+        for i in range(0, len(message)):
+            e[i] = message[i] * part_1.fast_modulo_exponentiation(player.open_key_2, self.k, SALT_P) % SALT_P
 
         player.take_card(r, e)
