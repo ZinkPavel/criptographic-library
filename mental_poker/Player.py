@@ -36,4 +36,9 @@ class Player:
         self.cards.append(Card(tmp[0], tmp[1]))
 
     def __str__(self):
-        return '[' + str(self.name) + ', key = ' + str(self.key) + ']'
+        string = '[' + str(self.name) + ', key = ' + str(self.key) + ']'
+
+        for i in range(0, len(self.cards)):
+            string += '\n\t' + str(self.cards[i])
+
+        return string

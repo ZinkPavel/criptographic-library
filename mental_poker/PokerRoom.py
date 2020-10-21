@@ -47,3 +47,14 @@ class PokerRoom:
             e[i] = message[i] * part_1.fast_modulo_exponentiation(player.open_key_2, self.k, SALT_P) % SALT_P
 
         player.take_card(r, e)
+
+    def __str__(self):
+        string = '[Desk, key = ' + str(self.open_key) + ']'
+
+        for i in range(0, len(self.card_on_desk)):
+            string += '\n\t' + str(self.card_on_desk[i])
+
+        for i in range(0, len(self.players)):
+            string += '\n\n' + str(self.players[i])
+
+        return string
