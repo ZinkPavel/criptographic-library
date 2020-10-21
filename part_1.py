@@ -48,6 +48,14 @@ def gen_p():
     return 2 * p + 1
 
 
+def gen_g(p):
+    while True:
+        g = random.randint(2, 100)
+        # g = random.randint(1, p - 1)
+        if fast_modulo_exponentiation(g, int((p - 1) / 2), p) != 1 and is_prime(g):
+            return g
+
+
 def is_prime(n):
     if n <= 2:
         return False
@@ -60,11 +68,8 @@ def is_prime(n):
 
 
 def fast_modulo_exponentiation(a, x, p):
-    if 1 > x >= p:
-        sys.exit('ERROR. [X] Must be from range (1, 2, ... , p-1)')
-
     result, tmp = 1, a
-    t = math.trunc(math.log2(x))
+    t = math.floor(math.log2(x))
 
     for num in range(t + 1):
         if num > 0:
@@ -78,7 +83,7 @@ def fast_modulo_exponentiation(a, x, p):
     return result % p
 
 
-def gen_euclidean_algo(a, b):
+def gcd(a, b):
     if b > a:
         a, b = b, a
 
@@ -111,7 +116,7 @@ def diffie_hellman_protocol(p, g):
     z_a, z_b = fast_modulo_exponentiation(y_b, x_a, p), fast_modulo_exponentiation(y_a, x_b, p)
 
     if z_a != z_b:
-        print('ERROR. z_a != z_b')
+        sys.exit(1)
 
     return z_a
 
