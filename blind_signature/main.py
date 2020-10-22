@@ -8,22 +8,22 @@ from blind_signature.ui import UI
 
 
 def main():
-    app = QApplication(sys.argv)
+    app_1 = QApplication(sys.argv)
     ui = UI()
-    tmp = ui
-    if app.exec():
-        print(tmp.bulletin)
 
-    response = tmp.bulletin
-    print(type(response))
+    if app_1.exec():
+        print(ui.bulletin)
 
-    pl = PollingStation()
-    pl.require(response)
+    response = ui.bulletin
 
-    app2 = QApplication(sys.argv)
-    check = pl.check(response)
-    ui2 = MessageSignature(response.nominal, response.signature, check)
-    sys.exit(app2.exec_())
+    ps = PollingStation()
+    ps.require(response)
+
+    app_2 = QApplication(sys.argv)
+    check = ps.check(response)
+    ui_2 = MessageSignature(response.nominal, response.signature, check)
+
+    sys.exit(app_2.exec_())
 
 
 if __name__ == "__main__":

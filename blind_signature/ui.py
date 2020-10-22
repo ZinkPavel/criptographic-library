@@ -1,36 +1,34 @@
-from PyQt5.QtWidgets import (QWidget, QCheckBox, QApplication,
-                             QHBoxLayout, QVBoxLayout, QLabel, QButtonGroup, QAbstractButton, QPushButton)
+from PyQt5.QtWidgets import (QWidget, QCheckBox, QLabel, QButtonGroup, QPushButton)
 
 from blind_signature.Bulletin import Bulletin
 
 
 class UI(QWidget):
-
     def __init__(self):
         super().__init__()
 
         self.response = None
         self.bulletin = None
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
-        qa = QLabel('Согласны ли вы с поправками в коституцию?', self)
-        checkBox1 = QCheckBox('За', self)
-        checkBox2 = QCheckBox('Против', self)
-        checkBox3 = QCheckBox('Воздрежусь', self)
-        btn = QPushButton('Отправить', self)
+    def init_ui(self):
+        qa = QLabel('HTML a programming language ?', self)
+        check_box_1 = QCheckBox('Yes', self)
+        check_box_2 = QCheckBox('No', self)
+        check_box_3 = QCheckBox('Refrain', self)
+        btn = QPushButton('Send', self)
 
         qa.move(85, 20)
-        checkBox1.move(80, 80)
-        checkBox2.move(180, 80)
-        checkBox3.move(270, 80)
+        check_box_1.move(80, 80)
+        check_box_2.move(180, 80)
+        check_box_3.move(270, 80)
 
         group = QButtonGroup(self)
-        group.addButton(checkBox1)
-        group.addButton(checkBox2)
-        group.addButton(checkBox3)
+        group.addButton(check_box_1)
+        group.addButton(check_box_2)
+        group.addButton(check_box_3)
 
-        group.buttonClicked.connect(self.changeText)
+        group.buttonClicked.connect(self.change_text)
 
         btn.clicked.connect(self.reaction)
         btn.resize(btn.sizeHint())
@@ -44,11 +42,10 @@ class UI(QWidget):
         if btn.clicked:
             return self.bulletin
 
-    def changeText(self, btn):
+    def change_text(self, btn):
         self.response = btn.text()
 
     def reaction(self):
-        print(type(self.response))
         self.bulletin = Bulletin(str(self.response))
         self.close()
 
