@@ -17,3 +17,10 @@ class GraphRSA:
         self.f = (self.p - 1) * (self.q - 1)
         self.d = part_1.gen_g(self.f)
         self.c = part_1.gcd(self.d, self.f)[1]
+
+    def encrypt(self):
+        for i in range(0, len(self.graph.graph_h)):
+            for j in range(0, len(self.graph.graph_h[i])):
+                self.coded[i][j] += self.graph.graph_h[i][j] + random.randint(1, self.graph.n) * 10
+                self.encrypted[i][j] += fme(self.coded[i][j], 3, self.n)
+
