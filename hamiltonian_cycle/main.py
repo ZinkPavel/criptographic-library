@@ -1,8 +1,14 @@
-from hamiltonian_cycle.io import Matrix
+from hamiltonian_cycle.graph import Graph
+from hamiltonian_cycle.crypt import GraphRSA
 
 
 def main():
-    instance = Matrix('data.txt')
+    graph = Graph('data.txt')
+    graph.make_isomorphism_graph()
+
+    cipher = GraphRSA(graph)
+    cipher.encrypt()
+    cipher.proof_isomorphism()
 
 
 if __name__ == "__main__":
