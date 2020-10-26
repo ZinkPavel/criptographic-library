@@ -34,3 +34,13 @@ class Graph:
         for elem in self.data:
             self.graph_g[elem[0]][elem[1]] = 1
             self.graph_g[elem[1]][elem[0]] = 1
+
+    def make_isomorphism_graph(self):
+        tmp = [i for i in range(0, 8)]
+        random.shuffle(tmp)
+        self.new_indices = [tmp.index(i) for i in range(0, 8)]
+
+        self.graph_h = np.zeros((8, 8))
+        for elem in self.data:
+            self.graph_h[self.new_indices[elem[0]]][self.new_indices[elem[1]]] = 1
+            self.graph_h[self.new_indices[elem[1]]][self.new_indices[elem[0]]] = 1
