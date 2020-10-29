@@ -5,6 +5,7 @@ from Crypto.Util import _number_new
 from Crypto.Util import number
 
 import part_1
+from part_1 import fast_modulo_exponentiation as fme
 
 
 def gen_g(p):
@@ -13,7 +14,7 @@ def gen_g(p):
 
     g = random.randint(1, p - 1)
 
-    while part_1.fast_modulo_exponentiation(g, (p - 1) / 2, p) == 1:
+    while fme(g, (p - 1) / 2, p) == 1:
         g = random.randint(1, p - 1)
     return g
 
@@ -40,9 +41,9 @@ class SignatureElGamal:
         self.message = SHA256.new(message).digest()  # return
 
         self.x = random.randint(1, self.p - 1)
-        self.open_key = part_1.fast_modulo_exponentiation(self.g, self.x, self.p)
+        self.open_key = fme(self.g, self.x, self.p)
         self.k = gen_coprime_integer_in_range(self.p - 1, 1, self.p - 1)
-        self.r = part_1.fast_modulo_exponentiation(self.g, self.k, self.p)  # return
+        self.r = fme(self.g, self.k, self.p)  # return
 
         self.u = 0
         self.s = 0  # return
@@ -50,12 +51,13 @@ class SignatureElGamal:
     def encode(self):
         hash_f = int.from_bytes(self.message, 'big') % self.p
         self.u = (hash_f - self.x * self.r) % (self.p - 1)
+        print(self.u)
         self.s = modulo_inversion(self.k, (self.p - 1)) * self.u % (self.p - 1)
 
     def decode(self):
         hash_f = int.from_bytes(self.message, 'big') % self.p
-        lhs = (part_1.fast_modulo_exponentiation(self.open_key, self.r, self.p) * part_1.fast_modulo_exponentiation(self.r, self.s, self.p)) % self.p
-        rhs = part_1.fast_modulo_exponentiation(self.g, hash_f, self.p)
+        lhs = (fme(self.open_key, self.r, self.p) * fme(self.r, self.s, self.p)) % self.p
+        rhs = fme(self.g, hash_f, self.p)
 
         if lhs != rhs:
             sys.exit(1)
@@ -76,11 +78,11 @@ class SignatureRSA:
 
     def encode(self):
         hash_f = int.from_bytes(SHA256.new(self.message).digest(), 'big') % self.n
-        self.signature = part_1.fast_modulo_exponentiation(hash_f, self.c, self.n)
+        self.signature = fme(hash_f, self.c, self.n)
 
     def decode(self):
         hash_f = int.from_bytes(SHA256.new(self.message).digest(), 'big') % self.n
-        w = part_1.fast_modulo_exponentiation(self.signature, self.d, self.n)
+        w = fme(self.signature, self.d, self.n)
 
         if hash_f != w:
             sys.exit(1)
@@ -101,7 +103,7 @@ class SignatureGOST:
                 self.p = number.getPrime(20)
 
         self.a = self.p - 1
-        while part_1.fast_modulo_exponentiation(self.a, self.q, self.p) != 1 and self.a > 1:
+        while fme(self.a, self.q, self.p) != 1 and self.a > 1:
             self.a -= 1
 
         self.r = 0  # return
@@ -109,11 +111,11 @@ class SignatureGOST:
         self.y = 0
 
         print('(' + str(self.p == b * self.q + 1) + ') p = bq + 1')
-        print('(' + str(part_1.fast_modulo_exponentiation(self.a, self.q, self.p) == 1) + ') a^q mod p = 1')
+        print('(' + str(fme(self.a, self.q, self.p) == 1) + ') a^q mod p = 1')
 
     def encode(self):
         x = random.randint(1, self.q)  # 9 - secret key
-        self.y = part_1.fast_modulo_exponentiation(self.a, x, self.p)  # open key
+        self.y = fme(self.a, x, self.p)  # open key
 
         h = int.from_bytes(self.message, 'big') % self.q
 
@@ -122,7 +124,7 @@ class SignatureGOST:
         while (self.r == 0 or self.s == 0) and k > 0:
             try:
                 k -= 1
-                self.r = part_1.fast_modulo_exponentiation(self.a, k, self.p) % self.q
+                self.r = fme(self.a, k, self.p) % self.q
                 self.s = (k * h + x * self.r) % self.q
                 print('r =', self.r, ' s =', self.s)
             except ValueError:
@@ -147,16 +149,16 @@ class SignatureGOST:
 
 
 def main():
-    with open('data/1.jpg', 'rb') as file:
+    with open('data/1.png', 'rb') as file:
         message = file.read()
     file.close()
 
-    instance = SignatureElGamal(message)
+    # instance = SignatureElGamal(message)
     # instance = SignatureRSA(message)
     # instance = SignatureGOST(message)
 
-    instance.encode()
-    instance.decode()
+    # instance.encode()
+    # instance.decode()
 
 
 if __name__ == "__main__":
