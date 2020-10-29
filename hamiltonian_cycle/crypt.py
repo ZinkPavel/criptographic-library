@@ -42,3 +42,12 @@ class GraphRSA:
                 raise ValueError('Error: proof isomorphism')
             if not result[self.graph.new_indices[elem[1]]][self.graph.new_indices[elem[0]]] == self.graph.graph_g[elem[1]][elem[0]]:
                 raise ValueError('Error: proof isomorphism')
+
+    def proof_cycle(self):
+        for elem in self.graph.data:
+            actual = self.coded[self.graph.new_indices[elem[0]]][self.graph.new_indices[elem[1]]]
+            expect = self.encrypted[self.graph.new_indices[elem[0]]][self.graph.new_indices[elem[1]]]
+
+            if not fme(actual, 3, self.n) == expect:
+                raise ValueError('Error: proof cycle')
+

@@ -9,6 +9,7 @@ def main():
     cipher = GraphRSA(graph)
     cipher.encrypt()
     cipher.proof_isomorphism()
+    cipher.proof_cycle()
 
 
 if __name__ == "__main__":
