@@ -40,3 +40,18 @@ class Graph:
         for point in self.points:
             self.data[point[0]][point[1]] = 1
             self.data[point[1]][point[0]] = 1
+
+    def make_isomorphism_graph(self):
+        self.alt_indices = list(range(0, self.vertices))
+        random.shuffle(self.alt_indices)
+
+        new_graph = np.zeros((self.vertices, self.vertices))
+        for elem in self.points:
+            new_graph[self.alt_indices[elem[0]]][self.alt_indices[elem[1]]] = 1
+            new_graph[self.alt_indices[elem[1]]][self.alt_indices[elem[0]]] = 1
+
+        result = Graph()
+        result.vertices, result.edges = self.vertices, self.edges
+        result.data = new_graph
+        # indices
+        return result
