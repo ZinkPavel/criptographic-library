@@ -50,4 +50,3 @@ class GraphRSA:
 
             if not fme(actual, 3, self.n) == expect:
                 raise ValueError('Error: proof cycle')
-
