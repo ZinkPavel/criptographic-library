@@ -7,13 +7,15 @@ from hamiltonian_cycle.cycle import HamiltonianCycle
 class Graph:
     def __init__(self, file_path='', n=0, m=0, data=np.matrix):
         self.vertices, self.edges = n, m
-        self.points = [int]
-        self.data = data
-        self.alt_indices = [int]
+        self.points = []
+        self.data = data  # matrix
+        self.alt_indices = []
         self.ham_cycle = HamiltonianCycle
 
         if not file_path == '':
             self.read_graph(file_path)
+
+        self.isom_graph = self.make_isomorphism_graph()
 
     def read_graph(self, file_path):
         if file_path == '':
@@ -36,7 +38,7 @@ class Graph:
         self.points = list(map(lambda line: line.split(' '), file[1: -1]))
         self.points = [list(map(lambda elem: int(elem) - 1, pair)) for pair in self.points]
 
-        self.data = np.zeros((self.vertices, self.vertices))
+        self.data = np.zeros((self.vertices, self.vertices), dtype=int)
         for point in self.points:
             self.data[point[0]][point[1]] = 1
             self.data[point[1]][point[0]] = 1
@@ -48,13 +50,9 @@ class Graph:
     def make_isomorphism_graph(self):
         self.make_alternative_indices()
 
-        new_graph = np.zeros((self.vertices, self.vertices))
+        new_graph = np.zeros((self.vertices, self.vertices), dtype=int)
         for elem in self.points:
             new_graph[self.alt_indices[elem[0]]][self.alt_indices[elem[1]]] = 1
             new_graph[self.alt_indices[elem[1]]][self.alt_indices[elem[0]]] = 1
 
-        result = Graph()
-        result.vertices, result.edges = self.vertices, self.edges
-        result.data = new_graph
-        # indices
-        return result
+        return new_graph
